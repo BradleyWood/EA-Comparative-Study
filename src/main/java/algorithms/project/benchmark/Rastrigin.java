@@ -1,6 +1,6 @@
 package algorithms.project.benchmark;
 
-public class Rastringin implements Benchmark {
+public class Rastrigin implements Benchmark {
 
     @Override
     public float benchmark(Float... params) {
