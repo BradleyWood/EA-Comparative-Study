@@ -3,9 +3,9 @@ package algorithms.project.benchmark;
 public class Griewank implements Benchmark {
 
     @Override
-    public float benchmark(Float... params) {
-        float lhs = 0;
-        float rhs = 1;
+    public Double benchmark(Double... params) {
+        double lhs = 0;
+        double rhs = 1;
         for (int i = 0; i < params.length; i++) {
             lhs += params[i] * params[i];
         }

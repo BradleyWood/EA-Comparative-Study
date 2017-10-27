@@ -2,6 +2,6 @@ package algorithms.project.benchmark;
 
 public interface Benchmark {
 
-    float benchmark(Float... params);
+    Double benchmark(Double... params);
 
 }

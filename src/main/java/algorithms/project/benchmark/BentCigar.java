@@ -3,8 +3,8 @@ package algorithms.project.benchmark;
 public class BentCigar implements Benchmark {
 
     @Override
-    public float benchmark(Float... params) {
-        float sq0 = params[0] * params[0];
+    public Double benchmark(Double... params) {
+        double sq0 = params[0] * params[0];
 
         float sumOfSquares1ToN = 0;
         for (int i = 1; i < params.length; i++) {
