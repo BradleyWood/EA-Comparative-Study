@@ -12,6 +12,11 @@ public class Griewank implements Benchmark {
         for (int i = 0; i < params.length; i++) {
             rhs *= Math.cos(params[i] / Math.sqrt(i + 1));
         }
-        return 1 + (lhs / 4000.0f - rhs);
+        return lhs / 4000.0f - rhs + 1;
+    }
+
+    @Override
+    public Double optimum() {
+        return 0d;
     }
 }

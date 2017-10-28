@@ -17,6 +17,11 @@ public class Sorted implements Benchmark {
         return invCount;
     }
 
+    @Override
+    public Double optimum() {
+        return 0d;
+    }
+
     private static int getInvCount(Double[] arr) {
         int inv_count = 0;
         for (int i = 0; i < arr.length - 1; i++)

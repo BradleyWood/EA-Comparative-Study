@@ -14,4 +14,9 @@ public class HCE implements Benchmark {
         }
         return fitness;
     }
+
+    @Override
+    public Double optimum() {
+        return 0d;
+    }
 }

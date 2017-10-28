@@ -11,4 +11,9 @@ public class Rosenbrock implements Benchmark {
         }
         return fitness;
     }
+
+    @Override
+    public Double optimum() {
+        return 1d;
+    }
 }

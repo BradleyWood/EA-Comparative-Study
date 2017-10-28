@@ -12,4 +12,9 @@ public class BentCigar implements Benchmark {
         }
         return sq0 + 1000000 * sumOfSquares1ToN;
     }
+
+    @Override
+    public Double optimum() {
+        return 0d;
+    }
 }

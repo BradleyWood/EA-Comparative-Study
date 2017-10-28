@@ -10,4 +10,9 @@ public class Rastrigin implements Benchmark {
         }
         return fitness;
     }
+
+    @Override
+    public Double optimum() {
+        return 0d;
+    }
 }

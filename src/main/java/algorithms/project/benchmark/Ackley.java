@@ -13,4 +13,9 @@ public class Ackley implements Benchmark {
         }
         return -20f * Math.exp(-0.2f * Math.sqrt(sumOfSquares / params.length)) - Math.exp(s2 / params.length) + 20f + Math.E;
     }
+
+    @Override
+    public Double optimum() {
+        return 0d;
+    }
 }
