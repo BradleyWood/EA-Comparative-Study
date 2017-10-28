@@ -23,16 +23,11 @@ public class DE implements GeneticAlgorithm {
     }
 
     public Vector<Double> run(Benchmark benchmark) {
-        ArrayList<Vector<Double>> population = new ArrayList<>();
-        for (int n = 0; n < populationSize; n++) {
-            Vector<Double> v = new Vector<>();
-            for (int i = 0; i < dim; i++) {
-                v.add(varMin + (varMax - varMin) * random.nextDouble());
-            }
-            population.add(v);
-        }
+        ArrayList<Vector<Double>> population = createPopulation(populationSize, dim, varMin, varMax);
 
-        for (int g = 0; g < 5000 * dim; g++) {
+        double minFitness = Double.POSITIVE_INFINITY;
+
+        for (int g = 0; g < 5000 * dim && minFitness > benchmark.optimum() + 1e-10; g++) {
             for (int i = 0; i < populationSize; i++) {
                 int Xa = selectParent(i);
                 int Xb = selectParent(i, Xa);
@@ -56,6 +51,9 @@ public class DE implements GeneticAlgorithm {
                     for (int d = 0; d < Xi.size(); d++) {
                         Xi.set(d, Ui.get(d));
                     }
+                }
+                if(bUi < minFitness) {
+                    minFitness = bUi;
                 }
             }
         }

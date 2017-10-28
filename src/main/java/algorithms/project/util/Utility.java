@@ -1,5 +1,7 @@
 package algorithms.project.util;
 
+import java.util.ArrayList;
+import java.util.Random;
 import java.util.Vector;
 
 public class Utility {
@@ -30,6 +32,19 @@ public class Utility {
             ret.add(v1.get(i) - v2.get(i));
         }
         return ret;
+    }
+
+    public static ArrayList<Vector<Double>> createPopulation(int size, int dim, double min, double max) {
+        Random random = new Random();
+        ArrayList<Vector<Double>> population = new ArrayList<>();
+        for (int n = 0; n < size; n++) {
+            Vector<Double> v = new Vector<>();
+            for (int i = 0; i < dim; i++) {
+                v.add(min + (max - min) * random.nextDouble());
+            }
+            population.add(v);
+        }
+        return population;
     }
 
 }
