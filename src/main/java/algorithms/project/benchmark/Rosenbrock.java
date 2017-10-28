@@ -14,6 +14,6 @@ public class Rosenbrock implements Benchmark {
 
     @Override
     public Double optimum() {
-        return 1d;
+        return 0d;
     }
 }
