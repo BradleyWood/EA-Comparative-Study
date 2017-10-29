@@ -32,4 +32,9 @@ public class DEBuilder {
         de.setVarRange(min, max);
         return this;
     }
+
+    public DEBuilder setCallback(final Callback callback) {
+        de.setCallback(callback);
+        return this;
+    }
 }

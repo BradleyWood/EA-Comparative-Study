@@ -8,7 +8,7 @@ import java.util.Vector;
 
 import static algorithms.project.util.Utility.*;
 
-public class DE implements GeneticAlgorithm {
+public class DE extends GeneticAlgorithm {
 
     private final Random random = new Random();
 
@@ -48,8 +48,11 @@ public class DE implements GeneticAlgorithm {
                 if (bUi < bXi) {
                     population.set(i, Ui);
                 }
-                if(bUi < minFitness) {
+                if (bUi < minFitness) {
                     minFitness = bUi;
+                }
+                if (callback != null && i % callback.interval() == 0) {
+                    callback.callback(population);
                 }
             }
         }
