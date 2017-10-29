@@ -1,16 +1,19 @@
 package algorithms.project.benchmark;
 
+import java.util.Vector;
+
 /**
  * High conditioned elliptic function
  */
 public class HCE implements Benchmark {
 
     @Override
-    public Double benchmark(Double... params) {
+    public Double benchmark(Vector<Double> params) {
         double fitness = 0;
+        int n = params.size();
 
-        for (int i = 0; i < params.length; i++) {
-            fitness += Math.pow(1000000, (i - 1) / (params.length - 1)) * params[i] * params[i];
+        for (int i = 0; i < n; i++) {
+            fitness += Math.pow(1000000, (i - 1) / (n - 1)) * params.get(i) * params.get(i);
         }
         return fitness;
     }

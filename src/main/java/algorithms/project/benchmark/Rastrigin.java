@@ -1,12 +1,15 @@
 package algorithms.project.benchmark;
 
+import java.util.Vector;
+
 public class Rastrigin implements Benchmark {
 
     @Override
-    public Double benchmark(Double... params) {
-        double fitness = 10 * params.length;
-        for (int i = 0; i < params.length; i++) {
-            fitness += params[i] * params[i] - 10 * Math.cos(2 * Math.PI * params[i]);
+    public Double benchmark(Vector<Double> params) {
+        int n = params.size();
+        double fitness = 10 * n;
+        for (int i = 0; i < n; i++) {
+            fitness += params.get(i) * params.get(i) - 10 * Math.cos(2 * Math.PI * params.get(i));
         }
         return fitness;
     }

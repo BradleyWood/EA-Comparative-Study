@@ -1,5 +1,7 @@
 package algorithms.project.benchmark;
 
+import java.util.Vector;
+
 /**
  * A test benchmark
  * The most fit solution contains positive sorted numbers less than 1000
@@ -7,10 +9,11 @@ package algorithms.project.benchmark;
 public class Sorted implements Benchmark {
 
     @Override
-    public Double benchmark(Double... params) {
-        double invCount = getInvCount(params);
-        for (int i = 0; i < params.length; i++) {
-            if (params[i] > 1000 || params[i] < 0) {
+    public Double benchmark(Vector<Double> params) {
+        int n = params.size();
+        double invCount = getInvCount(params.toArray(new Double[params.size()]));
+        for (int i = 0; i < n; i++) {
+            if (params.get(i) > 1000 || params.get(i) < 0) {
                 return Double.POSITIVE_INFINITY;
             }
         }

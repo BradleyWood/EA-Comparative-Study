@@ -26,7 +26,6 @@ public class DE implements GeneticAlgorithm {
         ArrayList<Vector<Double>> population = createPopulation(populationSize, dim, varMin, varMax);
 
         double minFitness = Double.POSITIVE_INFINITY;
-
         for (int g = 0; g < 5000 * dim && minFitness > benchmark.optimum() + 1e-10; g++) {
             for (int i = 0; i < populationSize; i++) {
                 int Xa = selectParent(i);
@@ -44,26 +43,22 @@ public class DE implements GeneticAlgorithm {
                         Ui.add(population.get(i).get(j));
                     }
                 }
-
-                double bUi = benchmark.benchmark(Ui.toArray(new Double[Ui.size()]));
-                double bXi = benchmark.benchmark(Xi.toArray(new Double[Xi.size()]));
+                double bUi = benchmark.benchmark(Ui);
+                double bXi = benchmark.benchmark(Xi);
                 if (bUi < bXi) {
-                    for (int d = 0; d < Xi.size(); d++) {
-                        Xi.set(d, Ui.get(d));
-                    }
+                    population.set(i, Ui);
                 }
                 if(bUi < minFitness) {
                     minFitness = bUi;
                 }
             }
         }
-
         Double bestFitness = Double.POSITIVE_INFINITY;
         Vector<Double> bestVector = null;
 
         for (int i = 0; i < populationSize; i++) {
             Vector<Double> Pi = population.get(i);
-            Double c = benchmark.benchmark(Pi.toArray(new Double[Pi.size()]));
+            Double c = benchmark.benchmark(Pi);
             if (c < bestFitness) {
                 bestFitness = c;
                 bestVector = Pi;

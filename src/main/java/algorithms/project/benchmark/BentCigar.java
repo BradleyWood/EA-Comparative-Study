@@ -1,14 +1,16 @@
 package algorithms.project.benchmark;
 
+import java.util.Vector;
+
 public class BentCigar implements Benchmark {
 
     @Override
-    public Double benchmark(Double... params) {
-        double sq0 = params[0] * params[0];
-
+    public Double benchmark(Vector<Double> params) {
+        double sq0 = params.get(0) * params.get(0);
+        int n = params.size();
         float sumOfSquares1ToN = 0;
-        for (int i = 1; i < params.length; i++) {
-            sumOfSquares1ToN += params[i] * params[i];
+        for (int i = 1; i < n; i++) {
+            sumOfSquares1ToN += params.get(i) * params.get(i);
         }
         return sq0 + 1000000 * sumOfSquares1ToN;
     }
