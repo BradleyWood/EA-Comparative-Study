@@ -48,7 +48,7 @@ public class Display implements Callback {
         };
     }
 
-    public Display(final GeneticAlgorithm algorithm, final Benchmark benchmark) {
+    private Display(final GeneticAlgorithm algorithm, final Benchmark benchmark) {
         this(algorithm, benchmark, 20d);
     }
 
