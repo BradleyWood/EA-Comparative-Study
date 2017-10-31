@@ -28,28 +28,26 @@ public class Display implements Callback {
 
     private final GeneticAlgorithm algorithm;
     private final Benchmark benchmark;
-    private final double maxZ;
+    private double maxZ;
 
     private final Mapper mapper;
 
     private Chart chart;
 
-    private Display(final GeneticAlgorithm algorithm, final Benchmark benchmark, final double maxZ) {
+    private Display(final GeneticAlgorithm algorithm, final Benchmark benchmark) {
         this.algorithm = algorithm;
         this.benchmark = benchmark;
-        this.maxZ = maxZ;
         mapper = new Mapper() {
             public double f(double x, double y) {
                 Vector<Double> v = new Vector<>();
                 v.add(x);
                 v.add(y);
-                return benchmark.benchmark(v);
+                double bm = benchmark.benchmark(v);
+                if (bm > maxZ)
+                    maxZ = bm;
+                return bm;
             }
         };
-    }
-
-    private Display(final GeneticAlgorithm algorithm, final Benchmark benchmark) {
-        this(algorithm, benchmark, 20d);
     }
 
     @Override
@@ -96,9 +94,5 @@ public class Display implements Callback {
 
     public static void display(GeneticAlgorithm algorithm, Benchmark benchmark) {
         new Display(algorithm, benchmark).show();
-    }
-
-    public static void display(GeneticAlgorithm algorithm, Benchmark benchmark, double maxZ) {
-        new Display(algorithm, benchmark, maxZ).show();
     }
 }
