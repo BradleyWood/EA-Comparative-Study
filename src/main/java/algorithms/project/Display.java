@@ -74,7 +74,7 @@ public class Display implements Callback {
 
     private void show() {
         Range range = new Range(-10, 10);
-        int steps = 200;
+        int steps = 300;
         Shape surface = Builder.buildOrthonormal(new OrthonormalGrid(range, steps), mapper);
         surface.setColorMapper(new ColorMapper(new ColorMapHotCold(), 0, maxZ));
         surface.setFaceDisplayed(true);
@@ -86,10 +86,10 @@ public class Display implements Callback {
 
         algorithm.setCallback(this);
         chart.open(benchmark.getClass().getSimpleName(), 600, 600);
-
         Vector<Double> v = algorithm.run(benchmark);
-        Point dr = new Point(new Coord3d(v.get(0), v.get(1), 0), Color.GREEN, 4);
-        chart.add(dr);
+        LinkedList<Vector<Double>> lst = new LinkedList<>();
+        lst.add(v);
+        callback(lst);
     }
 
     public static void display(GeneticAlgorithm algorithm, Benchmark benchmark) {
