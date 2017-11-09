@@ -6,6 +6,8 @@ import java.util.Vector;
 
 public class Utility {
 
+    private static final Random random = new Random();
+
     public static Vector<Double> scalarMult(Vector<Double> v, double factor) {
         Vector<Double> ret = new Vector<>(v.size());
         for (int i = 0; i < v.size(); i++) {
@@ -35,16 +37,19 @@ public class Utility {
     }
 
     public static ArrayList<Vector<Double>> createPopulation(int size, int dim, double min, double max) {
-        Random random = new Random();
         ArrayList<Vector<Double>> population = new ArrayList<>();
         for (int n = 0; n < size; n++) {
-            Vector<Double> v = new Vector<>();
-            for (int i = 0; i < dim; i++) {
-                v.add(min + (max - min) * random.nextDouble());
-            }
-            population.add(v);
+            population.add(createVector(dim, min, max));
         }
         return population;
+    }
+
+    public static Vector<Double> createVector(int dim, double min, double max) {
+        Vector<Double> v = new Vector<>();
+        for (int i = 0; i < dim; i++) {
+            v.add(min + (max - min) * random.nextDouble());
+        }
+        return v;
     }
 
 }
