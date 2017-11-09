@@ -1,12 +1,15 @@
 package algorithms.project.algorithm;
 
 import algorithms.project.benchmark.Benchmark;
-import algorithms.project.util.Utility;
 
-import java.util.List;
+import static algorithms.project.util.Utility.*;
+
+import java.util.Random;
 import java.util.Vector;
 
 public class PSO extends GeneticAlgorithm {
+
+    private static final Random random = new Random();
 
     private int populationSize;
     private int dim;
@@ -18,20 +21,66 @@ public class PSO extends GeneticAlgorithm {
     private double wStart;
     private double wFinish;
 
+    protected PSO() {
+    }
+
     @Override
     public Vector<Double> run(Benchmark benchmark) {
-        List<Vector<Double>> particles = Utility.createPopulation(populationSize, dim, varMin, varMax);
-        List<Vector<Double>> velocities = Utility.createPopulation(populationSize, dim, 0, 0);
-
+        Particle[] particles = new Particle[populationSize];
+        for (int i = 0; i < particles.length; i++) {
+            particles[i] = new Particle();
+        }
+        double inertiaWeight = wStart;
         double gBestFitness = Double.POSITIVE_INFINITY;
         Vector<Double> gBest = null;
 
-        for (int i = 0; i < 5000 * dim; i++) {
-            double pBestFitness = Double.POSITIVE_INFINITY;
-            Vector<Double> pBest = null;
-            for (int j = 0; j < populationSize; j++) {
-
+        for (int i = 0; i < particles.length; i++) {
+            double fitness = benchmark.benchmark(particles[i].getPosition());
+            if (fitness < gBestFitness) {
+                gBestFitness = fitness;
+                gBest = particles[i].getPosition();
             }
+        }
+
+        for (int i = 0; i < 5000 * dim; i++) {
+            for (int j = 0; j < populationSize; j++) {
+                Vector<Double> xi = particles[j].getPosition();
+                Vector<Double> vi = particles[j].getVelocity();
+
+                for (int k = 0; k < dim; k++) {
+                    vi.set(k, inertiaWeight * vi.get(k) + (random.nextDouble() * c1 * (particles[j].getpBest().get(k) - xi.get(k)))
+                            + (random.nextDouble() * c2 * (gBest.get(k) - xi.get(k))));
+                    if (vi.get(k) > 200d) {
+                        vi.set(k, 200d);
+                    }
+                    if (vi.get(k) < -200) {
+                        vi.set(k, -200d);
+                    }
+                    xi.set(k, xi.get(k) + vi.get(k));
+                }
+
+                double XiFitness = benchmark.benchmark(xi);
+                if (XiFitness < benchmark.benchmark(particles[j].getpBest())) {
+                    Vector<Double> copy = new Vector<>();
+                    for (int n = 0; n < dim; n++) {
+                        copy.add(xi.get(n));
+                    }
+                    particles[j].setpBest(copy, XiFitness);
+                }
+                if (XiFitness < gBestFitness) {
+                    gBestFitness = XiFitness;
+                    Vector<Double> copy = new Vector<>();
+                    for (int n = 0; n < dim; n++) {
+                        copy.add(xi.get(n));
+                    }
+                    gBest = copy;
+                    gBestFitness = XiFitness;
+                }
+                if (i % callback.interval() == 0) {
+                    // todo graphics callback
+                }
+            }
+            inertiaWeight = wStart - i * (wStart - wFinish);
         }
 
         return gBest;
@@ -99,5 +148,50 @@ public class PSO extends GeneticAlgorithm {
 
     public void setwFinish(double wFinish) {
         this.wFinish = wFinish;
+    }
+
+    private class Particle {
+        private Vector<Double> position;
+        private Vector<Double> velocity;
+        private Vector<Double> pBest;
+        private double pBestFitness;
+
+        public Particle() {
+            position = createVector(dim, varMin, varMax);
+            velocity = createVector(dim, 0, 0);
+            pBest = new Vector<>();
+            for (int i = 0; i < dim; i++) {
+                pBest.add(position.get(i));
+            }
+        }
+
+        public Vector<Double> getPosition() {
+            return position;
+        }
+
+        public Vector<Double> getVelocity() {
+            return velocity;
+        }
+
+        public Vector<Double> getpBest() {
+            return pBest;
+        }
+
+        public void setPosition(Vector<Double> position) {
+            this.position = position;
+        }
+
+        public void setVelocity(Vector<Double> velocity) {
+            this.velocity = velocity;
+        }
+
+        public void setpBest(Vector<Double> pBest, double pBestFitness) {
+            this.pBest = pBest;
+            this.pBestFitness = pBestFitness;
+        }
+
+        public double getpBestFitness() {
+            return pBestFitness;
+        }
     }
 }
