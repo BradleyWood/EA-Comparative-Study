@@ -12,11 +12,6 @@ public class PSO extends GeneticAlgorithm {
 
     private static final Random random = new Random();
 
-    private int populationSize;
-    private int dim;
-    private double varMin;
-    private double varMax;
-
     private double c1;
     private double c2;
     private double wStart;
@@ -90,38 +85,6 @@ public class PSO extends GeneticAlgorithm {
         }
 
         return gBest;
-    }
-
-    public int getPopulationSize() {
-        return populationSize;
-    }
-
-    public void setPopulationSize(int populationSize) {
-        this.populationSize = populationSize;
-    }
-
-    public int getDim() {
-        return dim;
-    }
-
-    public void setDim(int dim) {
-        this.dim = dim;
-    }
-
-    public double getVarMin() {
-        return varMin;
-    }
-
-    public void setVarMin(double varMin) {
-        this.varMin = varMin;
-    }
-
-    public double getVarMax() {
-        return varMax;
-    }
-
-    public void setVarMax(double varMax) {
-        this.varMax = varMax;
     }
 
     public double getC1() {

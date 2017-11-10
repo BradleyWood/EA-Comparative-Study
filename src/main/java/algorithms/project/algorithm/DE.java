@@ -12,12 +12,8 @@ public class DE extends GeneticAlgorithm {
 
     private final Random random = new Random();
 
-    private int dim;
-    private int populationSize;
     private double crossoverRate;
     private double mutationFactor;
-    private double varMin;
-    private double varMax;
 
     protected DE() {
     }
@@ -86,27 +82,6 @@ public class DE extends GeneticAlgorithm {
                 return true;
         }
         return false;
-    }
-
-    public void setVarRange(double varMin, double varMax) {
-        this.varMin = varMin;
-        this.varMax = varMax;
-    }
-
-    public int getDimentions() {
-        return dim;
-    }
-
-    public void setDim(int dim) {
-        this.dim = dim;
-    }
-
-    public int getPopulationSize() {
-        return populationSize;
-    }
-
-    public void setPopulationSize(int populationSize) {
-        this.populationSize = populationSize;
     }
 
     public double getCrossoverRate() {
