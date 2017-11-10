@@ -4,6 +4,7 @@ import algorithms.project.benchmark.Benchmark;
 
 import static algorithms.project.util.Utility.*;
 
+import java.util.LinkedList;
 import java.util.Random;
 import java.util.Vector;
 
@@ -42,21 +43,23 @@ public class PSO extends GeneticAlgorithm {
             }
         }
 
-        for (int i = 0; i < 5000 * dim; i++) {
-            for (int j = 0; j < populationSize; j++) {
+        int nfc = 5000 * dim;
+
+        for (int i = 0; i < nfc; i++) {
+            for (int j = 0; j < populationSize && gBestFitness > benchmark.optimum() + 1e-10; j++) {
                 Vector<Double> xi = particles[j].getPosition();
                 Vector<Double> vi = particles[j].getVelocity();
 
                 for (int k = 0; k < dim; k++) {
                     vi.set(k, inertiaWeight * vi.get(k) + (random.nextDouble() * c1 * (particles[j].getpBest().get(k) - xi.get(k)))
                             + (random.nextDouble() * c2 * (gBest.get(k) - xi.get(k))));
-                    if (vi.get(k) > 200d) {
-                        vi.set(k, 200d);
-                    }
-                    if (vi.get(k) < -200) {
-                        vi.set(k, -200d);
-                    }
                     xi.set(k, xi.get(k) + vi.get(k));
+                    if (xi.get(k) < varMin) {
+                        xi.set(k, varMin);
+                    }
+                    if (xi.get(k) > varMax) {
+                        xi.set(k, varMax);
+                    }
                 }
 
                 double XiFitness = benchmark.benchmark(xi);
@@ -74,13 +77,16 @@ public class PSO extends GeneticAlgorithm {
                         copy.add(xi.get(n));
                     }
                     gBest = copy;
-                    gBestFitness = XiFitness;
-                }
-                if (i % callback.interval() == 0) {
-                    // todo graphics callback
                 }
             }
-            inertiaWeight = wStart - i * (wStart - wFinish);
+            inertiaWeight -= (wStart - wFinish) / nfc;
+            if (callback != null && i % callback.interval() == 0) {
+                LinkedList<Vector<Double>> list = new LinkedList<>();
+                for (int k = 0; k < particles.length; k++) {
+                    list.add(particles[k].getPosition());
+                }
+                callback.callback(list);
+            }
         }
 
         return gBest;
