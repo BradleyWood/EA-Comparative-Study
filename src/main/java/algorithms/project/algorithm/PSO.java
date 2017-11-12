@@ -40,8 +40,8 @@ public class PSO extends GeneticAlgorithm {
 
         int nfc = 5000 * dim;
 
-        for (int i = 0; i < nfc; i++) {
-            for (int j = 0; j < populationSize && gBestFitness > benchmark.optimum() + 1e-10; j++) {
+        for (int i = 0; i < nfc && gBestFitness > benchmark.optimum() + 1e-10; i++) {
+            for (int j = 0; j < populationSize; j++) {
                 Vector<Double> xi = particles[j].getPosition();
                 Vector<Double> vi = particles[j].getVelocity();
 
