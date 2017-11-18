@@ -18,6 +18,8 @@ import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
@@ -28,15 +30,18 @@ public class Display implements Callback {
 
     private final GeneticAlgorithm algorithm;
     private final Benchmark benchmark;
+    private final boolean save;
     private double maxZ;
+    private int frameCount = 0;
 
     private final Mapper mapper;
 
     private Chart chart;
 
-    private Display(final GeneticAlgorithm algorithm, final Benchmark benchmark) {
+    private Display(final GeneticAlgorithm algorithm, final Benchmark benchmark, final boolean save) {
         this.algorithm = algorithm;
         this.benchmark = benchmark;
+        this.save = save;
         mapper = new Mapper() {
             public double f(double x, double y) {
                 Vector<Double> v = new Vector<>();
@@ -52,7 +57,7 @@ public class Display implements Callback {
 
     @Override
     public int interval() {
-        return 400;
+        return 200;
     }
 
     @Override
@@ -70,6 +75,19 @@ public class Display implements Callback {
             chart.addDrawable(dr, false);
         }
         chart.resumeAnimator();
+
+        if (save) {
+            try {
+                File file = new File(new File("."), "/results/" + algorithm.getClass().getSimpleName() + "/" + benchmark.getClass().getSimpleName());
+                file.getAbsoluteFile().mkdirs();
+                File f = new File(file, "/" + frameCount + ".png");
+                f.createNewFile();
+                chart.screenshot(f);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        frameCount++;
     }
 
     private void show() {
@@ -93,6 +111,10 @@ public class Display implements Callback {
     }
 
     public static void display(GeneticAlgorithm algorithm, Benchmark benchmark) {
-        new Display(algorithm, benchmark).show();
+        display(algorithm, benchmark, false);
+    }
+
+    public static void display(GeneticAlgorithm algorithm, Benchmark benchmark, boolean save) {
+        new Display(algorithm, benchmark, save).show();
     }
 }
