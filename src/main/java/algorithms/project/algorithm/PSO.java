@@ -50,10 +50,12 @@ public class PSO extends GeneticAlgorithm {
                             + (random.nextDouble() * c2 * (gBest.get(k) - xi.get(k))));
                     xi.set(k, xi.get(k) + vi.get(k));
                     if (xi.get(k) < varMin) {
-                        //    xi.set(k, varMin);
+                        xi.set(k, varMin);
+                        vi.set(k, -vi.get(k));
                     }
                     if (xi.get(k) > varMax) {
-                        //    xi.set(k, varMax);
+                        xi.set(k, varMax);
+                        vi.set(k, -vi.get(k));
                     }
                 }
 
