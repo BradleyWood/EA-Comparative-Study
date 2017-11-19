@@ -10,6 +10,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
@@ -65,5 +66,17 @@ public class Stats {
         FileOutputStream fos = new FileOutputStream(file);
         wb.write(fos);
         fos.close();
+    }
+
+    public static double variance(Collection<Double> values, double mean) {
+        double total = 0;
+        for (Double value : values) {
+            total += (value - mean) * (value - mean);
+        }
+        return total / values.size();
+    }
+
+    public static double standardDev(Collection<Double> values, double mean) {
+        return Math.sqrt(variance(values, mean));
     }
 }

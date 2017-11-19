@@ -2,8 +2,13 @@ package algorithms.project;
 
 import algorithms.project.algorithm.*;
 import algorithms.project.benchmark.*;
+import algorithms.project.util.Stats;
 import org.apache.commons.cli.*;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.*;
 
 public class Application {
@@ -33,7 +38,7 @@ public class Application {
     private static final PSO pso = new PSOBuilder().setC1(C1).setC2(C2).setPopulationSize(POPULATION_SIZE).setVariableRange(VAR_MIN, VAR_MAX)
             .setWRange(W_START, W_FINISH).build();
 
-    public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, ParseException {
+    public static void main(String[] args) throws InstantiationException, IllegalAccessException {
 
         Options options = new Options();
 
@@ -130,12 +135,43 @@ public class Application {
     }
 
     public static void test(GeneticAlgorithm alg, Collection<Class> benchmarks) throws IllegalAccessException, InstantiationException {
+        HSSFWorkbook wb = new HSSFWorkbook();
+        HSSFSheet[] SHEETS = new HSSFSheet[TEST_DIMENSIONS.length];
+        for (int i = 0; i < SHEETS.length; i++) {
+            SHEETS[i] = wb.createSheet("Table dim=" + TEST_DIMENSIONS[i]);
+        }
+
+        Arrays.stream(SHEETS).forEach(sh -> {
+            sh.createRow(0).createCell(0).setCellValue("Benchmark");
+            sh.getRow(0).createCell(1).setCellValue("Mean");
+            sh.getRow(0).createCell(2).setCellValue("Best");
+            sh.getRow(0).createCell(3).setCellValue("Worst");
+            sh.getRow(0).createCell(4).setCellValue("Standard Dev");
+            int i = 1;
+            for (Class benchmark : benchmarks) {
+                sh.createRow(i++).createCell(0).setCellValue(benchmark.getSimpleName());
+            }
+        });
+
+        int bmCountRow = 1;
         for (Class benchmark : benchmarks) {
             Benchmark bm = (Benchmark) benchmark.newInstance();
-            for (int dimension : TEST_DIMENSIONS) {
-                alg.setDim(dimension);
-                runTest(alg, bm, NUM_RUNS);
+            for (int i = 0; i < TEST_DIMENSIONS.length; i++) {
+                alg.setDim(TEST_DIMENSIONS[i]);
+                Vector<Double> results = runTest(alg, bm, NUM_RUNS);
+                for (int j = 1; j <= results.size(); j++) {
+                    SHEETS[i].getRow(bmCountRow).createCell(j).setCellValue(results.get(j - 1));
+                }
             }
+            bmCountRow++;
+        }
+
+        try {
+            FileOutputStream fos = new FileOutputStream(alg.getClass().getSimpleName() + "_results.xls");
+            wb.write(fos);
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -156,7 +192,7 @@ public class Application {
             }
         });
 
-        Vector<Double> bestVector = null;
+        LinkedList<Double> fitnessValues = new LinkedList<>();
         long finish = System.currentTimeMillis() - start;
         double worstFitness = Double.NEGATIVE_INFINITY;
         double bestFitness = Double.POSITIVE_INFINITY;
@@ -164,6 +200,7 @@ public class Application {
         int dim = 0;
         for (Vector<Double> v : list) {
             double fitness = benchmark.benchmark(v);
+            fitnessValues.add(fitness);
             dim = v.size();
             total += fitness;
             if (fitness > worstFitness) {
@@ -171,11 +208,18 @@ public class Application {
             }
             if (fitness < bestFitness) {
                 bestFitness = fitness;
-                bestVector = v;
             }
         }
         double mean = total / runs;
-        System.out.println(benchmark.getClass().getSimpleName() + " Time= " + finish + " dim= " + dim + " Mean: " + mean + " best: " + bestFitness + " worst: " + worstFitness);
-        return bestVector;
+        double stdev = Stats.standardDev(fitnessValues, mean);
+
+        Vector<Double> results = new Vector<>();
+        results.add(mean);
+        results.add(bestFitness);
+        results.add(worstFitness);
+        results.add(stdev);
+
+        System.out.println(benchmark.getClass().getSimpleName() + " Time= " + finish + " dim= " + dim + " Mean: " + mean + " best: " + bestFitness + " worst: " + worstFitness + " stdev: " + stdev);
+        return results;
     }
 }
