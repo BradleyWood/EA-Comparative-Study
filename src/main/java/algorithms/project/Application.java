@@ -9,7 +9,7 @@ import java.util.*;
 public class Application {
 
     public static Collection<Class> BENCHMARKS = Arrays.asList(Ackley.class, BentCigar.class, Discus.class,
-            HCE.class, Rastrigin.class, Rosenbrock.class, Griewank.class, Katsuura.class);
+            HCE.class, Rastrigin.class, Rosenbrock.class, Griewank.class, Katsuura.class, Weierstrass.class);
 
     private static final int[] TEST_DIMENSIONS = {2, 5, 10};
 
@@ -74,7 +74,7 @@ public class Application {
                 GeneticAlgorithm algorithm = getAlgorithm(cmd);
                 if (algorithm != null) {
                     algorithm.setDim(2);
-                    Display.display(algorithm, benchmark);
+                    Display.display(algorithm, benchmark, cmd.hasOption("save"));
                 } else {
                     help(options);
                 }
@@ -91,7 +91,6 @@ public class Application {
                         try {
                             for (String bm : benchmarks) {
                                 BENCHMARKS.add(Class.forName("algorithms.project.benchmark." + bm));
-                                System.out.println(bm);
                             }
                         } catch (ClassNotFoundException e) {
                             System.err.println("Benchmark: " + benchmarks[0] + " not found.");
