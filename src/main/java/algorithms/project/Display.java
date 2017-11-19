@@ -102,7 +102,7 @@ public class Display implements Callback {
         chart.addController(new AWTCameraMouseController());
         chart.add(surface);
 
-        algorithm.setCallback(this);
+        algorithm.addCallback(this);
         chart.open(benchmark.getClass().getSimpleName(), 600, 600);
         Vector<Double> v = algorithm.run(benchmark);
         LinkedList<Vector<Double>> lst = new LinkedList<>();

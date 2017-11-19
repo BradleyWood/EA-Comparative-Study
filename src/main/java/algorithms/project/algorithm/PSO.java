@@ -50,10 +50,10 @@ public class PSO extends GeneticAlgorithm {
                             + (random.nextDouble() * c2 * (gBest.get(k) - xi.get(k))));
                     xi.set(k, xi.get(k) + vi.get(k));
                     if (xi.get(k) < varMin) {
-                        xi.set(k, varMin);
+                        //    xi.set(k, varMin);
                     }
                     if (xi.get(k) > varMax) {
-                        xi.set(k, varMax);
+                        //    xi.set(k, varMax);
                     }
                 }
 
@@ -75,12 +75,15 @@ public class PSO extends GeneticAlgorithm {
                 }
             }
             inertiaWeight -= (wStart - wFinish) / nfc;
-            if (callback != null && i % callback.interval() == 0) {
-                LinkedList<Vector<Double>> list = new LinkedList<>();
-                for (int k = 0; k < particles.length; k++) {
-                    list.add(particles[k].getPosition());
+
+            for (Callback callback : callbacks) {
+                if (callback != null && i % callback.interval() == 0) {
+                    LinkedList<Vector<Double>> list = new LinkedList<>();
+                    for (int k = 0; k < particles.length; k++) {
+                        list.add(particles[k].getPosition());
+                    }
+                    callback.callback(list);
                 }
-                callback.callback(list);
             }
         }
 

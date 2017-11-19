@@ -33,8 +33,8 @@ public class DEBuilder {
         return this;
     }
 
-    public DEBuilder setCallback(final Callback callback) {
-        de.setCallback(callback);
+    public DEBuilder addCallback(final Callback callback) {
+        de.addCallback(callback);
         return this;
     }
 }

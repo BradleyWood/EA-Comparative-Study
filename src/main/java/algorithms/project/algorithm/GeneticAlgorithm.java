@@ -2,11 +2,12 @@ package algorithms.project.algorithm;
 
 import algorithms.project.benchmark.Benchmark;
 
+import java.util.LinkedList;
 import java.util.Vector;
 
 public abstract class GeneticAlgorithm {
 
-    protected Callback callback = null;
+    protected LinkedList<Callback> callbacks = new LinkedList<>();
     protected int populationSize;
     protected int dim;
     protected double varMin;
@@ -14,8 +15,8 @@ public abstract class GeneticAlgorithm {
 
     public abstract Vector<Double> run(Benchmark benchmark);
 
-    public void setCallback(Callback callback) {
-        this.callback = callback;
+    public void addCallback(Callback callback) {
+        callbacks.add(callback);
     }
 
     public int getPopulationSize() {

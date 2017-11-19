@@ -40,8 +40,8 @@ public class PSOBuilder {
         return this;
     }
 
-    public PSOBuilder setCallback(Callback callback) {
-        pso.setCallback(callback);
+    public PSOBuilder addCallback(Callback callback) {
+        pso.addCallback(callback);
         return this;
     }
 }
