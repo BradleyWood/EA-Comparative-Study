@@ -48,10 +48,10 @@ public class DE extends GeneticAlgorithm {
                 if (bUi < minFitness) {
                     minFitness = bUi;
                 }
-                for (Callback callback : callbacks) {
-                    if (callback != null && i % callback.interval() == 0) {
-                        callback.callback(population);
-                    }
+            }
+            for (Callback callback : callbacks) {
+                if (callback != null && g % callback.interval() == 0) {
+                    callback.callback(population);
                 }
             }
         }
