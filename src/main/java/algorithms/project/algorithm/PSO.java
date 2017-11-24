@@ -38,7 +38,7 @@ public class PSO extends GeneticAlgorithm {
             }
         }
 
-        int nfc = 5000 * dim;
+        int nfc = 3000 * dim;
 
         for (int i = 0; i < nfc && gBestFitness > benchmark.optimum() + 1e-10; i++) {
             for (int j = 0; j < populationSize; j++) {
@@ -51,11 +51,9 @@ public class PSO extends GeneticAlgorithm {
                     xi.set(k, xi.get(k) + vi.get(k));
                     if (xi.get(k) < varMin) {
                         xi.set(k, varMin);
-                        vi.set(k, -vi.get(k));
                     }
                     if (xi.get(k) > varMax) {
                         xi.set(k, varMax);
-                        vi.set(k, -vi.get(k));
                     }
                 }
 

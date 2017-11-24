@@ -22,7 +22,8 @@ public class DE extends GeneticAlgorithm {
         ArrayList<Vector<Double>> population = createPopulation(populationSize, dim, varMin, varMax);
 
         double minFitness = Double.POSITIVE_INFINITY;
-        for (int g = 0; g < 5000 * dim && minFitness > benchmark.optimum() + 1e-10; g++) {
+        int nfc = 3000 * dim;
+        for (int g = 0; g < nfc && minFitness > benchmark.optimum() + 1e-10; g++) {
             for (int i = 0; i < populationSize; i++) {
                 int Xa = selectParent(i);
                 int Xb = selectParent(i, Xa);
