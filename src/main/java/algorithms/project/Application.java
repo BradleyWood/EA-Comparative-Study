@@ -44,10 +44,16 @@ public class Application {
 
         options.addOption("de", false, "Run differential evolution");
         options.addOption("pso", false, "Run particle swarm optimization");
-
         options.addOption("save", false, "Whether to render frames to file");
 
-        options.addOption("test", true, "Test one or more algorithms or all");
+        Option plotFitness = new Option("pf", true, "Plot fitness vs NFC");
+        plotFitness.setArgs(Option.UNLIMITED_VALUES);
+        options.addOption(plotFitness);
+
+        Option testOption = new Option("test", true, "Test one or more algorithms or all");
+        testOption.setArgs(Option.UNLIMITED_VALUES);
+        options.addOption(testOption);
+
         options.addOption("display", true, "Display a specific algorithm in 3d");
 
         try {
@@ -56,18 +62,23 @@ public class Application {
 
             boolean test = cmd.hasOption("test");
             boolean display = cmd.hasOption("display");
+            boolean pf = cmd.hasOption("pf");
 
-            if (!test && !display) {
-                System.err.println("You must specific whether to test or display");
+            int count = countExpressions(test, display, pf);
+
+            if (count == 0) {
+                System.err.println("You must specify the action!");
                 help(options);
-            } else if (test && display) {
-                System.err.println("You cannot test and display!");
+                return;
+            }
+            if (count > 1) {
+                System.err.println("Actions are mutually exclusive");
                 help(options);
-            } else if (display) {
+                return;
+            }
+
+            if (display) {
                 String[] benchmarks = cmd.getOptionValues("display");
-                if (benchmarks.length != 1) {
-                    System.err.println("You must specify one and only one benchmark");
-                }
 
                 Benchmark benchmark = null;
                 try {
@@ -83,9 +94,8 @@ public class Application {
                 } else {
                     help(options);
                 }
-            } else {
+            } else if (test) {
                 String[] benchmarks = cmd.getOptionValues("test");
-                System.out.println(benchmarks.length);
                 GeneticAlgorithm algorithm = getAlgorithm(cmd);
 
                 if (algorithm != null) {
@@ -113,6 +123,14 @@ public class Application {
         }
     }
 
+    private static int countExpressions(boolean... booleans) {
+        int c = 0;
+        for (boolean b : booleans) {
+            c += b ? 1 : 0;
+        }
+        return c;
+    }
+
     private static void help(Options options) {
         HelpFormatter formatter = new HelpFormatter();
         formatter.printHelp("ant", options);
@@ -132,6 +150,10 @@ public class Application {
         } else {
             return pso;
         }
+    }
+
+    public static void plotFitness(GeneticAlgorithm algm) {
+
     }
 
     public static void test(GeneticAlgorithm alg, Collection<Class> benchmarks) throws IllegalAccessException, InstantiationException {
