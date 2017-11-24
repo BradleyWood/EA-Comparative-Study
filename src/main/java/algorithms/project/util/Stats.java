@@ -42,6 +42,11 @@ public class Stats {
             }
             fitnessValues.add(best);
         }
+
+        public void reset() {
+            fitnessValues.clear();
+            best = Double.POSITIVE_INFINITY;
+        }
     }
 
     public static void graphFitnessVsNFC(FitnessVsNFC callback, String file) throws IOException {

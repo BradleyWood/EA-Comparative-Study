@@ -115,8 +115,31 @@ public class Application {
                 } else {
                     help(options);
                 }
+            } else if (pf) {
+                String[] benchmark = cmd.getOptionValues("pf");
+                GeneticAlgorithm algorithm = getAlgorithm(cmd);
+                if (algorithm != null) {
+                    try {
+                        Benchmark bm = (Benchmark) Class.forName("algorithms.project.benchmark." + benchmark[0]).newInstance();
+                        Stats.FitnessVsNFC fitnessTracker = new Stats.FitnessVsNFC(bm);
+                        algorithm.addCallback(fitnessTracker);
+                        for (int testDimension : TEST_DIMENSIONS) {
+                            algorithm.setDim(testDimension);
+                            algorithm.run(bm);
+                            System.out.println("Plotted: " + bm.getClass().getSimpleName() + " dim= " + testDimension);
+                            Stats.graphFitnessVsNFC(fitnessTracker, "results/" + algorithm.getClass().getSimpleName()
+                                    + "/" + bm.getClass().getSimpleName() + "/fitnessVsNfc_dim=" + testDimension + ".xls");
+                            fitnessTracker.reset();
+                        }
+                    } catch (ClassNotFoundException e) {
+                        System.out.println("Benchmark not found");
+                    } catch (IOException e) {
+                        System.err.println("Could not save fitness vs nfc results");
+                    }
+                } else {
+                    help(options);
+                }
             }
-
         } catch (ParseException pe) {
             System.err.println("Invalid Command line arguments");
             help(options);
