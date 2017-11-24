@@ -29,7 +29,7 @@ public class Stats {
 
         @Override
         public int interval() {
-            return 10;
+            return 1;
         }
 
         @Override
@@ -49,7 +49,7 @@ public class Stats {
         Sheet sheet = wb.createSheet("Best Fitness Vs NFC");
 
         int row_count = 0;
-        double nfc = 10;
+        double nfc = callback.interval();
 
         sheet.createRow(row_count).createCell(0).setCellValue("NFC");
         sheet.getRow(row_count++).createCell(1).setCellValue("Best Fitness");
