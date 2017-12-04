@@ -16,7 +16,7 @@ public class Weierstrass implements Benchmark {
         this.kMax = kMax;
         double summation = 0;
         for(int i = 0; i < kMax + 1; i++) {
-            rhs += Math.pow(a, i) * Math.cos(2 * Math.PI * Math.pow(b, i) * 0.5);
+            summation += Math.pow(a, i) * Math.cos(2 * Math.PI * Math.pow(b, i) * 0.5);
         }
         rhs = summation;
     }
