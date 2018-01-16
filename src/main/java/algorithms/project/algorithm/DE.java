@@ -1,6 +1,6 @@
 package algorithms.project.algorithm;
 
-import algorithms.project.benchmark.Benchmark;
+import algorithms.project.benchmark.FitnessFunction;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -8,7 +8,7 @@ import java.util.Vector;
 
 import static algorithms.project.util.Utility.*;
 
-public class DE extends GeneticAlgorithm {
+public class DE extends EvolutionaryAlgorithm {
 
     private final Random random = new Random();
 
@@ -18,12 +18,12 @@ public class DE extends GeneticAlgorithm {
     protected DE() {
     }
 
-    public Vector<Double> run(Benchmark benchmark) {
+    public Vector<Double> run(FitnessFunction fitnessFunction) {
         ArrayList<Vector<Double>> population = createPopulation(populationSize, dim, varMin, varMax);
 
         double minFitness = Double.POSITIVE_INFINITY;
         int nfc = 3000 * dim;
-        for (int g = 0; g < nfc && minFitness > benchmark.optimum() + 1e-10; g++) {
+        for (int g = 0; g < nfc && minFitness > fitnessFunction.optimum() + 1e-10; g++) {
             for (int i = 0; i < populationSize; i++) {
                 int Xa = selectParent(i);
                 int Xb = selectParent(i, Xa);
@@ -40,8 +40,8 @@ public class DE extends GeneticAlgorithm {
                         Ui.add(population.get(i).get(j));
                     }
                 }
-                double bUi = benchmark.benchmark(Ui);
-                double bXi = benchmark.benchmark(Xi);
+                double bUi = fitnessFunction.fitness(Ui);
+                double bXi = fitnessFunction.fitness(Xi);
                 if (bUi < bXi) {
                     population.set(i, Ui);
                 }
@@ -60,7 +60,7 @@ public class DE extends GeneticAlgorithm {
 
         for (int i = 0; i < populationSize; i++) {
             Vector<Double> Pi = population.get(i);
-            Double c = benchmark.benchmark(Pi);
+            Double c = fitnessFunction.fitness(Pi);
             if (c < bestFitness) {
                 bestFitness = c;
                 bestVector = Pi;

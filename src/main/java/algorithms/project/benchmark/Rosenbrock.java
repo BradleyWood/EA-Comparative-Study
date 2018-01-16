@@ -2,10 +2,10 @@ package algorithms.project.benchmark;
 
 import java.util.Vector;
 
-public class Rosenbrock implements Benchmark {
+public class Rosenbrock implements FitnessFunction {
 
     @Override
-    public Double benchmark(Vector<Double> params) {
+    public Double fitness(Vector<Double> params) {
         double fitness = 0;
         int n = params.size();
         for (int i = 0; i < n - 1; i++) {

@@ -5,10 +5,10 @@ import java.util.Vector;
 /**
  * High conditioned elliptic function
  */
-public class HCE implements Benchmark {
+public class HCE implements FitnessFunction {
 
     @Override
-    public Double benchmark(Vector<Double> params) {
+    public Double fitness(Vector<Double> params) {
         double fitness = 0;
         int n = params.size();
 

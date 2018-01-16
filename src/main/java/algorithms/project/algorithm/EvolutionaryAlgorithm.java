@@ -1,11 +1,11 @@
 package algorithms.project.algorithm;
 
-import algorithms.project.benchmark.Benchmark;
+import algorithms.project.benchmark.FitnessFunction;
 
 import java.util.LinkedList;
 import java.util.Vector;
 
-public abstract class GeneticAlgorithm {
+public abstract class EvolutionaryAlgorithm {
 
     protected LinkedList<Callback> callbacks = new LinkedList<>();
     protected int populationSize;
@@ -13,7 +13,7 @@ public abstract class GeneticAlgorithm {
     protected double varMin;
     protected double varMax;
 
-    public abstract Vector<Double> run(Benchmark benchmark);
+    public abstract Vector<Double> run(FitnessFunction fitnessFunction);
 
     public void addCallback(Callback callback) {
         callbacks.add(callback);

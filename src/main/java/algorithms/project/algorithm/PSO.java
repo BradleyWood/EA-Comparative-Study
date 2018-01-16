@@ -1,6 +1,6 @@
 package algorithms.project.algorithm;
 
-import algorithms.project.benchmark.Benchmark;
+import algorithms.project.benchmark.FitnessFunction;
 
 import static algorithms.project.util.Utility.*;
 
@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.Random;
 import java.util.Vector;
 
-public class PSO extends GeneticAlgorithm {
+public class PSO extends EvolutionaryAlgorithm {
 
     private static final Random random = new Random();
 
@@ -21,7 +21,7 @@ public class PSO extends GeneticAlgorithm {
     }
 
     @Override
-    public Vector<Double> run(Benchmark benchmark) {
+    public Vector<Double> run(FitnessFunction fitnessFunction) {
         Particle[] particles = new Particle[populationSize];
         for (int i = 0; i < particles.length; i++) {
             particles[i] = new Particle();
@@ -31,7 +31,7 @@ public class PSO extends GeneticAlgorithm {
         Vector<Double> gBest = null;
 
         for (int i = 0; i < particles.length; i++) {
-            double fitness = benchmark.benchmark(particles[i].getPosition());
+            double fitness = fitnessFunction.fitness(particles[i].getPosition());
             if (fitness < gBestFitness) {
                 gBestFitness = fitness;
                 gBest = particles[i].getPosition();
@@ -40,7 +40,7 @@ public class PSO extends GeneticAlgorithm {
 
         int nfc = 3000 * dim;
 
-        for (int i = 0; i < nfc && gBestFitness > benchmark.optimum() + 1e-10; i++) {
+        for (int i = 0; i < nfc && gBestFitness > fitnessFunction.optimum() + 1e-10; i++) {
             for (int j = 0; j < populationSize; j++) {
                 Vector<Double> xi = particles[j].getPosition();
                 Vector<Double> vi = particles[j].getVelocity();
@@ -57,8 +57,8 @@ public class PSO extends GeneticAlgorithm {
                     }
                 }
 
-                double XiFitness = benchmark.benchmark(xi);
-                if (XiFitness < benchmark.benchmark(particles[j].getpBest())) {
+                double XiFitness = fitnessFunction.fitness(xi);
+                if (XiFitness < fitnessFunction.fitness(particles[j].getpBest())) {
                     Vector<Double> copy = new Vector<>();
                     for (int n = 0; n < dim; n++) {
                         copy.add(xi.get(n));

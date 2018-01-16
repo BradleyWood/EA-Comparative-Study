@@ -2,10 +2,10 @@ package algorithms.project.benchmark;
 
 import java.util.Vector;
 
-public class Rastrigin implements Benchmark {
+public class Rastrigin implements FitnessFunction {
 
     @Override
-    public Double benchmark(Vector<Double> params) {
+    public Double fitness(Vector<Double> params) {
         int n = params.size();
         double fitness = 10 * n;
         for (int i = 0; i < n; i++) {

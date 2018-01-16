@@ -2,10 +2,10 @@ package algorithms.project.benchmark;
 
 import java.util.Vector;
 
-public class Griewank implements Benchmark {
+public class Griewank implements FitnessFunction {
 
     @Override
-    public Double benchmark(Vector<Double> params) {
+    public Double fitness(Vector<Double> params) {
         double lhs = 0;
         double rhs = 1;
         int n = params.size();

@@ -3,13 +3,13 @@ package algorithms.project.benchmark;
 import java.util.Vector;
 
 /**
- * A test benchmark
+ * A test fitness
  * The most fit solution contains positive sorted numbers less than 1000
  */
-public class Sorted implements Benchmark {
+public class Sorted implements FitnessFunction {
 
     @Override
-    public Double benchmark(Vector<Double> params) {
+    public Double fitness(Vector<Double> params) {
         int n = params.size();
         double invCount = getInvCount(params.toArray(new Double[params.size()]));
         for (int i = 0; i < n; i++) {

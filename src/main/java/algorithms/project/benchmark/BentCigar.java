@@ -2,10 +2,10 @@ package algorithms.project.benchmark;
 
 import java.util.Vector;
 
-public class BentCigar implements Benchmark {
+public class BentCigar implements FitnessFunction {
 
     @Override
-    public Double benchmark(Vector<Double> params) {
+    public Double fitness(Vector<Double> params) {
         double sq0 = params.get(0) * params.get(0);
         int n = params.size();
         float sumOfSquares1ToN = 0;

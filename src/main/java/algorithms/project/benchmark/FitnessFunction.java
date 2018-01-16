@@ -2,8 +2,8 @@ package algorithms.project.benchmark;
 
 import java.util.Vector;
 
-public interface Benchmark {
+public interface FitnessFunction {
 
-    Double benchmark(Vector<Double> vector);
+    Double fitness(Vector<Double> vector);
     Double optimum();
 }

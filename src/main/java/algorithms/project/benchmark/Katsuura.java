@@ -2,10 +2,10 @@ package algorithms.project.benchmark;
 
 import java.util.Vector;
 
-public class Katsuura implements Benchmark {
+public class Katsuura implements FitnessFunction {
 
     @Override
-    public Double benchmark(Vector<Double> params) {
+    public Double fitness(Vector<Double> params) {
         double product = 1;
         int n = params.size();
         for (int i = 0; i < n; i++) {

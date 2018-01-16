@@ -2,10 +2,10 @@ package algorithms.project.benchmark;
 
 import java.util.Vector;
 
-public class Ackley implements Benchmark {
+public class Ackley implements FitnessFunction {
 
     @Override
-    public Double benchmark(Vector<Double> params) {
+    public Double fitness(Vector<Double> params) {
         double sumOfSquares = 0;
         float s2 = 0;
         int n = params.size();

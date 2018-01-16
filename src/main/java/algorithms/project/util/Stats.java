@@ -1,7 +1,7 @@
 package algorithms.project.util;
 
 import algorithms.project.algorithm.Callback;
-import algorithms.project.benchmark.Benchmark;
+import algorithms.project.benchmark.FitnessFunction;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -20,11 +20,11 @@ public class Stats {
     public static class FitnessVsNFC implements Callback {
 
         private LinkedList<Double> fitnessValues = new LinkedList<>();
-        private Benchmark benchmark;
+        private FitnessFunction fitnessFunction;
         double best = Double.POSITIVE_INFINITY;
 
-        public FitnessVsNFC(Benchmark benchmark) {
-            this.benchmark = benchmark;
+        public FitnessVsNFC(FitnessFunction fitnessFunction) {
+            this.fitnessFunction = fitnessFunction;
         }
 
         @Override
@@ -35,7 +35,7 @@ public class Stats {
         @Override
         public void callback(List<Vector<Double>> population) {
             for (Vector<Double> vector : population) {
-                double fitness = benchmark.benchmark(vector);
+                double fitness = fitnessFunction.fitness(vector);
                 if (fitness < best) {
                     best = fitness;
                 }

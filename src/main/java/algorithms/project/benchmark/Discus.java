@@ -2,10 +2,10 @@ package algorithms.project.benchmark;
 
 import java.util.Vector;
 
-public class Discus implements Benchmark {
+public class Discus implements FitnessFunction {
 
     @Override
-    public Double benchmark(Vector<Double> params) {
+    public Double fitness(Vector<Double> params) {
         double fitness = 1000000 * params.get(0) * params.get(0);
         int n = params.size();
         for (int i = 1; i < n; i++) {

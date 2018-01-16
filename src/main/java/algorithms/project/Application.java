@@ -80,23 +80,23 @@ public class Application {
             if (display) {
                 String[] benchmarks = cmd.getOptionValues("display");
 
-                Benchmark benchmark = null;
+                FitnessFunction fitnessFunction = null;
                 try {
-                    benchmark = (Benchmark) Class.forName("algorithms.project.benchmark." + benchmarks[0]).newInstance();
+                    fitnessFunction = (FitnessFunction) Class.forName("algorithms.project.fitnessFunction." + benchmarks[0]).newInstance();
                 } catch (ClassNotFoundException e) {
-                    System.err.println("Benchmark: " + benchmarks[0] + " not found.");
+                    System.err.println("FitnessFunction: " + benchmarks[0] + " not found.");
                 }
 
-                GeneticAlgorithm algorithm = getAlgorithm(cmd);
+                EvolutionaryAlgorithm algorithm = getAlgorithm(cmd);
                 if (algorithm != null) {
                     algorithm.setDim(2);
-                    Display.display(algorithm, benchmark, cmd.hasOption("save"));
+                    Display.display(algorithm, fitnessFunction, cmd.hasOption("save"));
                 } else {
                     help(options);
                 }
             } else if (test) {
                 String[] benchmarks = cmd.getOptionValues("test");
-                GeneticAlgorithm algorithm = getAlgorithm(cmd);
+                EvolutionaryAlgorithm algorithm = getAlgorithm(cmd);
 
                 if (algorithm != null) {
                     if (benchmarks.length == 1 && benchmarks[0].toLowerCase().equals("all")) {
@@ -105,10 +105,10 @@ public class Application {
                         BENCHMARKS = new LinkedList<>();
                         try {
                             for (String bm : benchmarks) {
-                                BENCHMARKS.add(Class.forName("algorithms.project.benchmark." + bm));
+                                BENCHMARKS.add(Class.forName("algorithms.project.fitness." + bm));
                             }
                         } catch (ClassNotFoundException e) {
-                            System.err.println("Benchmark: " + benchmarks[0] + " not found.");
+                            System.err.println("FitnessFunction: " + benchmarks[0] + " not found.");
                         }
                         test(algorithm, BENCHMARKS);
                     }
@@ -117,10 +117,10 @@ public class Application {
                 }
             } else if (pf) {
                 String[] benchmark = cmd.getOptionValues("pf");
-                GeneticAlgorithm algorithm = getAlgorithm(cmd);
+                EvolutionaryAlgorithm algorithm = getAlgorithm(cmd);
                 if (algorithm != null) {
                     try {
-                        Benchmark bm = (Benchmark) Class.forName("algorithms.project.benchmark." + benchmark[0]).newInstance();
+                        FitnessFunction bm = (FitnessFunction) Class.forName("algorithms.project.fitness." + benchmark[0]).newInstance();
                         Stats.FitnessVsNFC fitnessTracker = new Stats.FitnessVsNFC(bm);
                         algorithm.addCallback(fitnessTracker);
                         for (int testDimension : TEST_DIMENSIONS) {
@@ -132,7 +132,7 @@ public class Application {
                             fitnessTracker.reset();
                         }
                     } catch (ClassNotFoundException e) {
-                        System.out.println("Benchmark not found");
+                        System.out.println("FitnessFunction not found");
                     } catch (IOException e) {
                         System.err.println("Could not save fitness vs nfc results");
                     }
@@ -159,7 +159,7 @@ public class Application {
         formatter.printHelp("ant", options);
     }
 
-    private static GeneticAlgorithm getAlgorithm(CommandLine cmd) {
+    private static EvolutionaryAlgorithm getAlgorithm(CommandLine cmd) {
         boolean pso_option = cmd.hasOption("pso");
         boolean de_option = cmd.hasOption("de");
         if (!pso_option && !de_option) {
@@ -175,11 +175,11 @@ public class Application {
         }
     }
 
-    public static void plotFitness(GeneticAlgorithm algm) {
+    public static void plotFitness(EvolutionaryAlgorithm algm) {
 
     }
 
-    public static void test(GeneticAlgorithm alg, Collection<Class> benchmarks) throws IllegalAccessException, InstantiationException {
+    public static void test(EvolutionaryAlgorithm alg, Collection<Class> benchmarks) throws IllegalAccessException, InstantiationException {
         HSSFWorkbook wb = new HSSFWorkbook();
         HSSFSheet[] SHEETS = new HSSFSheet[TEST_DIMENSIONS.length];
         for (int i = 0; i < SHEETS.length; i++) {
@@ -187,7 +187,7 @@ public class Application {
         }
 
         Arrays.stream(SHEETS).forEach(sh -> {
-            sh.createRow(0).createCell(0).setCellValue("Benchmark");
+            sh.createRow(0).createCell(0).setCellValue("FitnessFunction");
             sh.getRow(0).createCell(1).setCellValue("Mean");
             sh.getRow(0).createCell(2).setCellValue("Best");
             sh.getRow(0).createCell(3).setCellValue("Worst");
@@ -200,7 +200,7 @@ public class Application {
 
         int bmCountRow = 1;
         for (Class benchmark : benchmarks) {
-            Benchmark bm = (Benchmark) benchmark.newInstance();
+            FitnessFunction bm = (FitnessFunction) benchmark.newInstance();
             for (int i = 0; i < TEST_DIMENSIONS.length; i++) {
                 alg.setDim(TEST_DIMENSIONS[i]);
                 Vector<Double> results = runTest(alg, bm, NUM_RUNS);
@@ -220,12 +220,12 @@ public class Application {
         }
     }
 
-    private static Vector<Double> runTest(GeneticAlgorithm alg, Benchmark benchmark, int runs) {
+    private static Vector<Double> runTest(EvolutionaryAlgorithm alg, FitnessFunction fitnessFunction, int runs) {
         Collection<Vector<Double>> list = Collections.synchronizedCollection(new ArrayList<Vector<Double>>());
         LinkedList<Thread> threadList = new LinkedList<>();
         long start = System.currentTimeMillis();
         for (int i = 0; i < runs; i++) {
-            Thread th = new Thread(() -> list.add(alg.run(benchmark)));
+            Thread th = new Thread(() -> list.add(alg.run(fitnessFunction)));
             threadList.add(th);
             th.start();
         }
@@ -244,7 +244,7 @@ public class Application {
         double total = 0;
         int dim = 0;
         for (Vector<Double> v : list) {
-            double fitness = benchmark.benchmark(v);
+            double fitness = fitnessFunction.fitness(v);
             fitnessValues.add(fitness);
             dim = v.size();
             total += fitness;
@@ -264,7 +264,7 @@ public class Application {
         results.add(worstFitness);
         results.add(stdev);
 
-        System.out.println(benchmark.getClass().getSimpleName() + " Time= " + finish + " dim= " + dim + " Mean: " + mean + " best: " + bestFitness + " worst: " + worstFitness + " stdev: " + stdev);
+        System.out.println(fitnessFunction.getClass().getSimpleName() + " Time= " + finish + " dim= " + dim + " Mean: " + mean + " best: " + bestFitness + " worst: " + worstFitness + " stdev: " + stdev);
         return results;
     }
 }

@@ -2,7 +2,7 @@ package algorithms.project.benchmark;
 
 import java.util.Vector;
 
-public class Weierstrass implements Benchmark {
+public class Weierstrass implements FitnessFunction {
 
 
     private final double a;
@@ -26,7 +26,7 @@ public class Weierstrass implements Benchmark {
     }
 
     @Override
-    public Double benchmark(Vector<Double> vector) {
+    public Double fitness(Vector<Double> vector) {
         double summation = 0;
         for (int i = 0; i < vector.size(); i++) {
             for (int j = 0; j < kMax + 1; j++) {
