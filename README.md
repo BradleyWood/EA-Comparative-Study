@@ -10,18 +10,20 @@ mvn clean compile assembly:single
 
 ### Running
 
+You must specify the algorithm to test by using -de or -pso as
+a command line argument.
 
 ```
-java -jar <path to jar>.jar -display <Benchmark name>
+java -jar <path to jar>.jar <-de or -pso> -display <Benchmark name>
 ```
 
-To run the benchmarks and output the rest results
+To run the benchmarks and output the test results
 ```
-java -jar <path to jar>.jar -test
+java -jar <path to jar>.jar <-de or -pso> -test
 ```
 or
 ```
-java -jar <path to jar>.jar -test <Benchmark name>
+java -jar <path to jar>.jar <-de or -pso> -test <Benchmark name>
 ```
 
 ## Benchmark Examples
