@@ -2,7 +2,7 @@ package algorithms.project;
 
 import algorithms.project.algorithm.Callback;
 import algorithms.project.algorithm.EvolutionaryAlgorithm;
-import algorithms.project.benchmark.FitnessFunction;
+import algorithms.project.algorithm.FitnessFunction;
 import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
@@ -91,7 +91,7 @@ public class Display implements Callback {
     }
 
     private void show() {
-        Range range = new Range(-100, 100);
+        Range range = new Range(-10, 10);
         int steps = 300;
         Shape surface = Builder.buildOrthonormal(new OrthonormalGrid(range, steps), mapper);
         surface.setColorMapper(new ColorMapper(new ColorMapHotCold(), 0, maxZ));

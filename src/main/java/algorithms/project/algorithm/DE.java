@@ -1,7 +1,5 @@
 package algorithms.project.algorithm;
 
-import algorithms.project.benchmark.FitnessFunction;
-
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Vector;

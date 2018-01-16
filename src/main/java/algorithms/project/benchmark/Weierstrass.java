@@ -1,5 +1,7 @@
 package algorithms.project.benchmark;
 
+import algorithms.project.algorithm.FitnessFunction;
+
 import java.util.Vector;
 
 public class Weierstrass implements FitnessFunction {

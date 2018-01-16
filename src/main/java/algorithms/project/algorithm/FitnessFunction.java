@@ -1,4 +1,4 @@
-package algorithms.project.benchmark;
+package algorithms.project.algorithm;
 
 import java.util.Vector;
 

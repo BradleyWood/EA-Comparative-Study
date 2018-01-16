@@ -1,7 +1,7 @@
 package algorithms.project.util;
 
 import algorithms.project.algorithm.Callback;
-import algorithms.project.benchmark.FitnessFunction;
+import algorithms.project.algorithm.FitnessFunction;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;

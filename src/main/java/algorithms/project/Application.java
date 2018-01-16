@@ -82,7 +82,7 @@ public class Application {
 
                 FitnessFunction fitnessFunction = null;
                 try {
-                    fitnessFunction = (FitnessFunction) Class.forName("algorithms.project.fitnessFunction." + benchmarks[0]).newInstance();
+                    fitnessFunction = (FitnessFunction) Class.forName("algorithms.project.benchmark." + benchmarks[0]).newInstance();
                 } catch (ClassNotFoundException e) {
                     System.err.println("FitnessFunction: " + benchmarks[0] + " not found.");
                 }

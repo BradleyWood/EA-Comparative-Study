@@ -1,7 +1,5 @@
 package algorithms.project.algorithm;
 
-import algorithms.project.benchmark.FitnessFunction;
-
 import static algorithms.project.util.Utility.*;
 
 import java.util.LinkedList;
